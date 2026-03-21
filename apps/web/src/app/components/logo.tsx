@@ -6,8 +6,8 @@ export default function LogoThin() {
             <Image 
                 src="/picture/Logo(Thin).png"
                 alt="Logo"
-                width={250}
-                height={65}
+                width={200}
+                height={60}
            /> 
         </div>
     );
