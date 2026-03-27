@@ -15,9 +15,26 @@ import {
 
 const app = new Hono();
 
+const allowedOriginPatterns = [
+  /^http:\/\/localhost:\d+$/,
+  /^http:\/\/127\.0\.0\.1:\d+$/,
+  /^http:\/\/192\.168\.\d{1,3}\.\d{1,3}:\d+$/,
+  /^http:\/\/10\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+$/,
+  /^http:\/\/172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}:\d+$/,
+];
+
+const isAllowedOrigin = (origin: string) =>
+  allowedOriginPatterns.some((pattern) => pattern.test(origin));
+
 // CORS
 app.use("*", async (c, next) => {
-  c.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  const origin = c.req.header("origin");
+
+  if (origin && isAllowedOrigin(origin)) {
+    c.header("Access-Control-Allow-Origin", origin);
+    c.header("Vary", "Origin");
+  }
+
   c.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
   c.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
@@ -34,7 +51,9 @@ app.get("/api/hello", (c) =>
 // Register endpoint
 app.post("/api/auth/register", async (c) => {
   try {
+    console.log("Register request received");
     const body = await c.req.json();
+    console.log("Body parsed:", body);
     const { username, email, phone, password, confirmPassword } = body;
 
     // Validation
@@ -79,10 +98,14 @@ app.post("/api/auth/register", async (c) => {
     }
 
     // Hash password
+    console.log("Hashing password...");
     const hashedPassword = await hashPassword(password);
+    console.log("Password hashed");
 
     // Create user
+    console.log("Creating user...");
     const user = createUser(username, email, phone, hashedPassword);
+    console.log("User created:", user.id);
 
     // Generate token
     const token = generateToken();
@@ -103,14 +126,19 @@ app.post("/api/auth/register", async (c) => {
     );
   } catch (error) {
     console.error("Register error:", error);
-    return c.json({ message: "เกิดข้อผิดพลาดในการลงทะเบียน" }, { status: 500 });
+    return c.json(
+      { message: "เกิดข้อผิดพลาดในการลงทะเบียน", error: String(error) }, 
+      { status: 500 }
+    );
   }
 });
 
 // Login endpoint
 app.post("/api/auth/login", async (c) => {
   try {
+    console.log("Login request received");
     const body = await c.req.json();
+    console.log("Body parsed");
     const { usernameOrEmail, password } = body;
 
     // Validation
@@ -160,7 +188,10 @@ app.post("/api/auth/login", async (c) => {
     );
   } catch (error) {
     console.error("Login error:", error);
-    return c.json({ message: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ" }, { status: 500 });
+    return c.json(
+      { message: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ", error: String(error) }, 
+      { status: 500 }
+    );
   }
 });
 

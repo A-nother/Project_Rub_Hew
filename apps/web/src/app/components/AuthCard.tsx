@@ -13,6 +13,11 @@ type AuthCardProps = {
 export default function AuthCard({ mode }: AuthCardProps) {
   const router = useRouter();
   const isLogin = mode === "login";
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    (typeof window !== "undefined"
+      ? `${window.location.protocol}//${window.location.hostname}:4000`
+      : "http://localhost:4000");
 
   const [loginForm, setLoginForm] = useState({
     usernameOrEmail: "",
@@ -31,7 +36,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:4000/api/auth/login", {
+      const res = await fetch(`${apiBaseUrl}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +44,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
         body: JSON.stringify(loginForm),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         alert(data.message || "เข้าสู่ระบบไม่สำเร็จ");
@@ -50,7 +55,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
       console.log("login success:", data);
       const token = data.token || "dummy-token";
       localStorage.setItem("authToken", token);
-      router.push("/dashboard");
+      router.push("/");
     } catch (error) {
       console.error(error);
       alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
@@ -66,7 +71,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/auth/register", {
+      const res = await fetch(`${apiBaseUrl}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +79,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
         body: JSON.stringify(registerForm),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         alert(data.message || "ลงทะเบียนไม่สำเร็จ");

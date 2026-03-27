@@ -1,7 +1,10 @@
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { join, dirname } from "path";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-const DB_PATH = join(new URL(".", import.meta.url).pathname.replace(/^\/([a-zA-Z]:)/, "$1"), "../data/users.json");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const DB_PATH = join(__dirname, "../data/users.json");
 
 interface User {
   id: string;
@@ -20,8 +23,7 @@ interface Database {
 function ensureDataDir(): void {
   const dataDir = dirname(DB_PATH);
   if (!existsSync(dataDir)) {
-    const fs = require("fs");
-    fs.mkdirSync(dataDir, { recursive: true });
+    mkdirSync(dataDir, { recursive: true });
   }
 }
 
