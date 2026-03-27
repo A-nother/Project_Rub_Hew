@@ -1,3 +1,4 @@
+import Link from "next/link";
 import NavbarMain from "./components/navbarMain";
 import Sidebar from "./components/sidebar";
 import FilterChipsAndAdd from "./components/filterChipsAndAdd";
@@ -6,6 +7,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#FFF8EC] text-[#D5C2A3]">
       <NavbarMain />
+
 
       <div className="flex">
         <Sidebar />
