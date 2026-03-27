@@ -81,8 +81,12 @@ export default function AuthCard({ mode }: AuthCardProps) {
         return;
       }
 
-      alert("ลงทะเบียนสำเร็จ");
+      alert("ลงทะเบียนสำเร็จ! กำลังเปลี่ยนหน้าไปเข้าสู่ระบบ...");
       console.log("register success:", data);
+      const token = data.token || "dummy-token";
+      localStorage.setItem("authToken", token);
+      // Redirect to login page
+      router.push("/login");
     } catch (error) {
       console.error(error);
       alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
