@@ -10,6 +10,11 @@ type AuthCardProps = {
   mode: Mode;
 };
 
+type ApiResponse = {
+  message?: string;
+  token?: string;
+};
+
 export default function AuthCard({ mode }: AuthCardProps) {
   const router = useRouter();
   const isLogin = mode === "login";
@@ -27,11 +32,19 @@ export default function AuthCard({ mode }: AuthCardProps) {
     confirmPassword: "",
   });
 
+  const parseJson = async (res: Response): Promise<ApiResponse> => {
+    try {
+      return (await res.json()) as ApiResponse;
+    } catch {
+      return {};
+    }
+  };
+
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:4000/api/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +52,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
         body: JSON.stringify(loginForm),
       });
 
-      const data = await res.json();
+      const data = await parseJson(res);
 
       if (!res.ok) {
         alert(data.message || "เข้าสู่ระบบไม่สำเร็จ");
@@ -47,10 +60,8 @@ export default function AuthCard({ mode }: AuthCardProps) {
       }
 
       alert("เข้าสู่ระบบสำเร็จ");
-      console.log("login success:", data);
-      const token = data.token || "dummy-token";
-      localStorage.setItem("authToken", token);
-      router.push("/dashboard");
+      localStorage.setItem("authToken", data.token || "dummy-token");
+      router.push("/");
     } catch (error) {
       console.error(error);
       alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
@@ -66,7 +77,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +85,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
         body: JSON.stringify(registerForm),
       });
 
-      const data = await res.json();
+      const data = await parseJson(res);
 
       if (!res.ok) {
         alert(data.message || "ลงทะเบียนไม่สำเร็จ");
@@ -82,7 +93,8 @@ export default function AuthCard({ mode }: AuthCardProps) {
       }
 
       alert("ลงทะเบียนสำเร็จ");
-      console.log("register success:", data);
+      localStorage.setItem("authToken", data.token || "dummy-token");
+      router.push("/login");
     } catch (error) {
       console.error(error);
       alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");

@@ -1,11 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Sidebar() {
+    const router = useRouter();
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
+
+    const handleLogout = () => {
+        localStorage.removeItem("authToken");
+        router.push("/login");
+        router.refresh();
+    };
 
     return (
         <div>
@@ -126,7 +134,10 @@ export default function Sidebar() {
                     </div>
                 </div>
 
-                <button className="flex items-center justify-between rounded-full bg-[#D5C2A3] px-4 py-2 text-lg shadow-sm">
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center justify-between rounded-full bg-[#D5C2A3] px-4 py-2 text-lg shadow-sm"
+                >
                     <span className="text-black font-thainohead">ออกจากระบบ</span>
                     <span>
                         <Image
