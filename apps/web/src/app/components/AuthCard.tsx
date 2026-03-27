@@ -48,6 +48,8 @@ export default function AuthCard({ mode }: AuthCardProps) {
 
       alert("เข้าสู่ระบบสำเร็จ");
       console.log("login success:", data);
+      const token = data.token || "dummy-token";
+      localStorage.setItem("authToken", token);
       router.push("/dashboard");
     } catch (error) {
       console.error(error);
