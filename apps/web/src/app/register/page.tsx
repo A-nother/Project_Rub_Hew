@@ -1,6 +1,6 @@
-import AuthCard from "../components/AuthCard";
-import AuthLogo from "../components/AuthLogo";
-import AuthNavbar from "../components/AuthNavbar";
+import AuthCard from "@/app/components/AuthCard";
+import AuthLogo from "@/app/components/AuthLogo";
+import AuthNavbar from "@/app/components/AuthNavbar";
 
 export default function RegisterPage() {
   return (
