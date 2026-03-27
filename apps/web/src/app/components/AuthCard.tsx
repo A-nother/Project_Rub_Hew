@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 type Mode = "login" | "register";
@@ -10,6 +11,7 @@ type AuthCardProps = {
 };
 
 export default function AuthCard({ mode }: AuthCardProps) {
+  const router = useRouter();
   const isLogin = mode === "login";
 
   const [loginForm, setLoginForm] = useState({
@@ -46,6 +48,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
 
       alert("เข้าสู่ระบบสำเร็จ");
       console.log("login success:", data);
+      router.push("/dashboard");
     } catch (error) {
       console.error(error);
       alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
@@ -211,6 +214,19 @@ export default function AuthCard({ mode }: AuthCardProps) {
           <button type="submit" className={buttonClass}>
             ลงทะเบียน
           </button>
+
+          <div className="flex items-center gap-3 py-3">
+            <div className="h-px flex-1 bg-[#7B7268]" />
+            <span className="text-sm text-[#7B7268]">หรือ</span>
+            <div className="h-px flex-1 bg-[#7B7268]" />
+          </div>
+
+          <Link
+            href="/login"
+            className="flex h-12 w-full items-center justify-center rounded-full bg-[#D5C2A3] text-lg font-medium text-[#2F4363] shadow-[0_3px_6px_rgba(0,0,0,0.12)] transition hover:opacity-90"
+          >
+            เข้าสู่ระบบ
+          </Link>
         </form>
       )}
     </div>
