@@ -25,7 +25,7 @@ export default function HomePage() {
         <Sidebar />
 
         <div className="flex-1">
-          <section className="px-6 pb-6 pt-8">
+          <section className="px-6 pb-6 pt-6">
             <div className="flex flex-col gap-6 lg:flex-row">
               
               {/* 🔹 โปรไฟล์ */}
