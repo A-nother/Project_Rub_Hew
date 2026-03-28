@@ -19,7 +19,7 @@ export default function NavbarMain() {
               <input
                 type="text"
                 placeholder="ค้นหา"
-                className="font-thai w-full bg-transparent text-base outline-none"
+                className="font-thainohead w-full bg-transparent text-base outline-none"
               />
             </div>
           </div>

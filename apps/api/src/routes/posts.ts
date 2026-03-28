@@ -35,29 +35,27 @@ app.post("/api/posts", async (c) => {
   let itemListID: ObjectId | null = null;
   let postImageUrl: string | null = null;
 
-  if (postType === "Carrier") {
-    const items = Array.isArray(body.items) ? (body.items as Item[]) : [];
+// 🔹 items (optional)
+const items = Array.isArray(body.items) ? (body.items as Item[]) : [];
 
-    if (!items.length) {
-      return c.json({ message: "Carrier ต้องมี items" }, 400);
-    }
-
-    try {
-      itemListID = await createItemList(items);
-    } catch (error) {
-      return c.json({ message: "ข้อมูล items ไม่ถูกต้อง" }, 400);
-    }
+if (items.length > 0) {
+  try {
+    itemListID = await createItemList(items);
+  } catch {
+    return c.json({ message: "ข้อมูล items ไม่ถูกต้อง" }, 400);
   }
+}
 
-  if (postType === "Request") {
-    const imageUrl = String(rawPostImageUrl ?? "").trim();
+// 🔹 image (optional)
+const imageUrl = String(rawPostImageUrl ?? "").trim();
+if (imageUrl) {
+  postImageUrl = imageUrl;
+}
 
-    if (!imageUrl) {
-      return c.json({ message: "Request ต้องมี postImageUrl" }, 400);
-    }
-
-    postImageUrl = imageUrl;
-  }
+// 🔹 กันโพสต์ว่าง (แนะนำมาก)
+if (!discription && !items.length && !postImageUrl) {
+  return c.json({ message: "โพสต์ต้องมีอย่างน้อย 1 อย่าง" }, 400);
+}
 
   const newPost: PostDoc = {
     userId: new ObjectId(userId),
