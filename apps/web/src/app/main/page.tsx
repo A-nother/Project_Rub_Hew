@@ -1,7 +1,6 @@
-import NavbarMain from "./components/navbarMain";
-import Sidebar from "./components/sidebar";
-import FilterChipsAndAdd from "./components/filterChipsAndAdd";
-import BackAndAdd from "./components/backAndAdd";
+import NavbarMain from "../components/navbarMain";
+import Sidebar from "../components/sidebar";
+import FilterChipsAndAdd from "../components/filterChipsAndAdd";
 
 export default function HomePage() {
   return (
@@ -12,7 +11,7 @@ export default function HomePage() {
         <Sidebar />
 
         <div className="flex-1">
-          <BackAndAdd />
+          <FilterChipsAndAdd />
 
           <section className="p-6">
             {/* content ตรงกลาง/การ์ดโพสต์ ใส่ตรงนี้ */}
