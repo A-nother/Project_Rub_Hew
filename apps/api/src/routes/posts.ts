@@ -34,29 +34,15 @@ app.post("/api/posts", async (c) => {
   }
 
   let itemListID: ObjectId | null = null;
-  let postImageUrl: string | null = null;
+  const postImageUrl: string | null = rawPostImageUrl || null;
 
-// 🔹 items (optional)
-const items = Array.isArray(body.items) ? (body.items as Item[]) : [];
-
-if (items.length > 0) {
-  try {
-    itemListID = await createItemList(items);
-  } catch {
-    return c.json({ message: "ข้อมูล items ไม่ถูกต้อง" }, 400);
+  if (items.length > 0) {
+    try {
+      itemListID = await createItemList(items);
+    } catch {
+      return c.json({ message: "ข้อมูล items ไม่ถูกต้อง" }, 400);
+    }
   }
-}
-
-// 🔹 image (optional)
-const imageUrl = String(rawPostImageUrl ?? "").trim();
-if (imageUrl) {
-  postImageUrl = imageUrl;
-}
-
-// 🔹 กันโพสต์ว่าง (แนะนำมาก)
-if (!discription && !items.length && !postImageUrl) {
-  return c.json({ message: "โพสต์ต้องมีอย่างน้อย 1 อย่าง" }, 400);
-}
 
   const newPost: PostDoc = {
     userId: new ObjectId(userId),
