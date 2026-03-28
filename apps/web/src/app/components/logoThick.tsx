@@ -6,8 +6,8 @@ export default function LogoThick() {
             <Image 
                 src="/picture/Logo(Thick).png"
                 alt="Logo"
-                width={250}
-                height={350}
+                width={220}
+                height={220}
            /> 
         </div>
     );
