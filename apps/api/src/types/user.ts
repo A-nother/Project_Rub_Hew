@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 export type UserDoc = {
   _id: ObjectId;
   username: string;
+  phone: number;
   email: string;
   passwordHash: string;
   profileImageUrl: string;

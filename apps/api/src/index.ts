@@ -16,3 +16,5 @@ Bun.serve({
   port: 4000,
   fetch: app.fetch,
 });
+
+console.log("🚀 API running at http://localhost:4000");

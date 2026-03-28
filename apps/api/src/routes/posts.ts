@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { ObjectId } from "mongodb";
 import { getDb } from "../libs/mongo";
 import { requireAuth } from "../middlewares/requireAuth";
-import { createItemList } from "../services/itemList.service";
+import { createItemList, updateItemList } from "../services/itemList.service";
 import type { AppVariables } from "../types/hono";
 import type { PostDoc } from "../types/post";
 import type { Item } from "../types/itemList";
@@ -22,7 +22,8 @@ app.post("/api/posts", async (c) => {
   const discription = String(body.discription ?? "").trim();
   const postType = String(body.postType ?? "").trim() as "Carrier" | "Request";
   const postCatagory = String(body.postCatagory ?? "").trim();
-  const rawPostImageUrl = body.postImageUrl;
+  const rawPostImageUrl = String(body.postImageUrl ?? "").trim();
+  const items = Array.isArray(body.items) ? (body.items as Item[]) : [];
 
   if (!discription || !postType || !postCatagory) {
     return c.json({ message: "กรอกข้อมูลไม่ครบ" }, 400);
@@ -80,6 +81,82 @@ if (!discription && !items.length && !postImageUrl) {
     },
     201
   );
+});
+
+app.patch("/api/posts/:postId", async (c) => {
+  const db = await getDb();
+  const posts = db.collection<PostDoc>("posts");
+
+  const userId = c.get("userId");
+  const postId = c.req.param("postId");
+
+  if (!ObjectId.isValid(postId)) {
+    return c.json({ message: "postId ไม่ถูกต้อง" }, 400);
+  }
+
+  const post = await posts.findOne({
+    _id: new ObjectId(postId),
+  });
+
+  if (!post) {
+    return c.json({ message: "ไม่พบโพสต์" }, 404);
+  }
+
+  if (post.userId.toString() !== userId) {
+    return c.json({ message: "ไม่มีสิทธิ์แก้ไขโพสต์นี้" }, 403);
+  }
+
+  const body = await c.req.json();
+  const updateData: Partial<PostDoc> = {};
+
+  if (body.discription !== undefined) {
+    updateData.discription = String(body.discription).trim();
+  }
+
+  if (body.postCatagory !== undefined) {
+    updateData.postCatagory = String(body.postCatagory).trim();
+  }
+
+  if (body.postType !== undefined) {
+    const postType = String(body.postType).trim() as "Carrier" | "Request";
+
+    if (postType !== "Carrier" && postType !== "Request") {
+      return c.json({ message: "postType ไม่ถูกต้อง" }, 400);
+    }
+
+    updateData.postType = postType;
+  }
+
+  if (body.postImageUrl !== undefined) {
+    const imageUrl = String(body.postImageUrl ?? "").trim();
+    updateData.postImageUrl = imageUrl || null;
+  }
+
+  if (body.items !== undefined) {
+    const items = Array.isArray(body.items) ? (body.items as Item[]) : [];
+
+    if (items.length > 0) {
+      try {
+        if (post.itemListID) {
+          await updateItemList(post.itemListID.toString(), items);
+        } else {
+          const newItemListID = await createItemList(items);
+          updateData.itemListID = newItemListID;
+        }
+      } catch {
+        return c.json({ message: "ข้อมูล items ไม่ถูกต้อง" }, 400);
+      }
+    } else {
+      updateData.itemListID = null;
+    }
+  }
+
+  await posts.updateOne(
+    { _id: new ObjectId(postId) },
+    { $set: updateData }
+  );
+
+  return c.json({ message: "edit post success" });
 });
 
 app.get("/api/feed", async (c) => {
