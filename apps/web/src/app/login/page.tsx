@@ -22,7 +22,7 @@ export default function LoginPage() {
 
           {/* ฝั่งขวา: ฟอร์มล็อคอิน */}
           <div className="w-full max-w-sm">
-            <h2 className="text-2xl font-bold text-[#324B66] mb-6">
+            <h2 className="font-thainohead text-2xl text-[#324B66] mb-6 font-bold">
               เข้าสู่ระบบ
             </h2>
 
@@ -31,20 +31,20 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="ชื่อผู้ใช้/อีเมล"
-                className="w-full px-6 py-3 rounded-full bg-white shadow-md border-transparent focus:outline-none focus:ring-2 focus:ring-[#D5C2A3] text-gray-700 placeholder-gray-400"
+                className="font-thainohead w-full px-6 py-3 rounded-full bg-white shadow-md border-transparent focus:outline-none focus:ring-2 focus:ring-[#D5C2A3] text-gray-700 placeholder-gray-400"
               />
 
               {/* Input: รหัสผ่าน */}
               <input
                 type="password"
                 placeholder="รหัสผ่าน"
-                className="w-full px-6 py-3 rounded-full bg-white shadow-md border-transparent focus:outline-none focus:ring-2 focus:ring-[#D5C2A3] text-gray-700 placeholder-gray-400"
+                className="font-thainohead w-full px-6 py-3 rounded-full bg-white shadow-md border-transparent focus:outline-none focus:ring-2 focus:ring-[#D5C2A3] text-gray-700 placeholder-gray-400"
               />
 
               {/* ปุ่ม: เข้าสู่ระบบ */}
               <button
                 type="button"
-                className="w-full mt-2 py-3 rounded-full bg-[#D8C7A8] text-[#324B66] text-lg hover:bg-[#c9b796] transition-colors shadow-md"
+                className="font-thainohead w-full mt-2 py-3 rounded-full bg-[#D8C7A8] text-[#324B66] text-lg hover:bg-[#c9b796] transition-colors shadow-md"
               >
                 เข้าสู่ระบบ
               </button>
@@ -59,7 +59,7 @@ export default function LoginPage() {
               {/* ปุ่ม: ลงทะเบียน */}
               <button
                 type="button"
-                className="w-full py-3 rounded-full bg-[#D8C7A8] text-[#324B66] text-lg hover:bg-[#c9b796] transition-colors shadow-md"
+                className="font-thainohead font-thainohead w-full py-3 rounded-full bg-[#D8C7A8] text-[#324B66] text-lg hover:bg-[#c9b796] transition-colors shadow-md"
               >
                 ลงทะเบียน
               </button>
