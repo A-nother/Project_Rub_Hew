@@ -17,7 +17,7 @@ export default function HomePage() {
         <Sidebar />
 
         <div className="flex-1">
-          <section className="p-6 overflow-y-auto h-120">
+          <section className="p-6 overflow-y-auto h-145">
 
             {/* 🔥 ส่ง function ไป */}
             <FilterChipsAndAdd onOpen={() => setOpenCreate(true)} />
