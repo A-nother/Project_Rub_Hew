@@ -1,8 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import NavbarMain from "../components/navbarMain";
 import Sidebar from "../components/sidebar";
 import FilterChipsAndAdd from "../components/filterChipsAndAdd";
+import CreatePostForm from "../components/createPostForm";
 
 export default function HomePage() {
+  const [openCreate, setOpenCreate] = useState(false);
+
   return (
     <main className="min-h-screen bg-[#FFF8EC] text-[#D5C2A3]">
       <NavbarMain />
@@ -11,10 +17,18 @@ export default function HomePage() {
         <Sidebar />
 
         <div className="flex-1">
-          <FilterChipsAndAdd />
+          <section className="p-6 overflow-y-auto h-120">
 
-          <section className="p-6">
-            {/* content ตรงกลาง/การ์ดโพสต์ ใส่ตรงนี้ */}
+            {/* 🔥 ส่ง function ไป */}
+            <FilterChipsAndAdd onOpen={() => setOpenCreate(true)} />
+
+            {/* 🔥 ตรงนี้สำคัญ */}
+            {openCreate ? (
+              <CreatePostForm onClose={() => setOpenCreate(false)} />
+            ) : (
+              <div>{/* post list เดิม */}</div>
+            )}
+
           </section>
         </div>
       </div>

@@ -4,7 +4,11 @@ import { useState } from "react";
 
 type FilterType = "all" | "carry" | "request";
 
-export default function FilterChipsAndAdd() {
+export default function FilterChipsAndAdd({
+  onOpen,
+}: {
+  onOpen: () => void;
+}) {
   const [activeChip, setActiveChip] = useState<FilterType>("all");
 
   const baseClass =
@@ -50,8 +54,11 @@ export default function FilterChipsAndAdd() {
         </button>
       </div>
 
-      <button className="flex h-14 w-14 items-center justify-center rounded-full bg-[#CBBCA4] text-4xl text-black shadow-md shadow-black">
-        +
+      <button
+        onClick={onOpen}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-[#CBBCA4] text-4xl text-black shadow-sm shadow-black"
+      >
+      +
       </button>
     </div>
   );

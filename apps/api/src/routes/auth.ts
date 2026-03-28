@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 import { getDb } from "../libs/mongo";
 import { createJwt, verifyJwt, jwtMaxAge } from "../libs/jwt";
 import { hashToken } from "../libs/token";
+import { setCookie } from "hono/cookie";
 
 const app = new Hono();
 
@@ -14,6 +15,7 @@ app.post("/api/register", async (c) => {
 
   const body = await c.req.json();
   const username = String(body.username ?? "").trim();
+  const phone = Number(body.phone ?? "");
   const email = String(body.email ?? "").trim().toLowerCase();
   const password = String(body.password ?? "");
 
@@ -35,6 +37,7 @@ app.post("/api/register", async (c) => {
   const userDoc = {
     username,
     email,
+    phone,
     passwordHash,
     profileImageUrl: "",
     ratingAverage: 0,
@@ -69,10 +72,13 @@ app.post("/api/register", async (c) => {
     expiresAt,
   });
 
-  c.header(
-  "Set-Cookie",
-  `access_token=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${jwtMaxAge}`
-  );
+  setCookie(c, "access_token", token, {
+  httpOnly: true,
+  secure: false, // dev
+  sameSite: "Lax",
+  path: "/",
+  maxAge: jwtMaxAge,
+  });
 
   return c.json(
     {
@@ -93,7 +99,7 @@ app.post("/api/login", async (c) => {
   const sessions = db.collection("sessions");
 
   const body = await c.req.json();
-  const email = String(body.email ?? "").trim().toLowerCase();
+  const identifier = String(body.email ?? "").trim().toLowerCase();
   const password = String(body.password ?? "");
 
   const user = await users.findOne<{
@@ -104,7 +110,12 @@ app.post("/api/login", async (c) => {
     role: string;
     isBanned: boolean;
     banReason?: string;
-  }>({ email });
+  }>({
+  $or: [
+    { email: identifier },
+    { username: identifier }
+  ]
+});
 
   if (!user) {
     return c.json({ message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" }, 401);
@@ -145,10 +156,13 @@ app.post("/api/login", async (c) => {
     expiresAt,
   });
 
-  c.header(
-  "Set-Cookie",
-  `access_token=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${jwtMaxAge}`
-  );
+  setCookie(c, "access_token", token, {
+  httpOnly: true,
+  secure: false, // dev
+  sameSite: "Lax",
+  path: "/",
+  maxAge: jwtMaxAge,
+  });
 
   return c.json({
     message: "login success",

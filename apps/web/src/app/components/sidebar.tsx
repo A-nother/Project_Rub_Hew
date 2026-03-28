@@ -2,10 +2,27 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
+
+    const router = useRouter();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
+    async function handleLogout() {
+        try {
+            await fetch(`${apiUrl}/api/logout`, {
+            method: "POST",
+            credentials: "include", // ⭐ สำคัญมาก
+            });
+
+            router.push("/login");
+        } catch {
+            alert("logout ไม่สำเร็จ");
+        }
+    }
 
     return (
         <div>
@@ -126,7 +143,10 @@ export default function Sidebar() {
                     </div>
                 </div>
 
-                <button className="flex items-center justify-between rounded-full bg-[#D5C2A3] px-4 py-2 text-lg shadow-sm">
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center justify-between rounded-full bg-[#D5C2A3] px-4 py-2 text-lg shadow-sm"
+                >
                     <span className="text-black font-thainohead">ออกจากระบบ</span>
                     <span>
                         <Image

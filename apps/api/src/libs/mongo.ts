@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
-const DB_NAME = process.env.MONGODB_DB_NAME || "rub_hew";
+const DB_NAME = process.env.MONGODB_DB_NAME || "user_db";
 
 if (!MONGODB_URI) {
   throw new Error("Missing MONGODB_URI");
