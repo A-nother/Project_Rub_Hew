@@ -1,6 +1,6 @@
 
 import { redirect } from "next/dist/client/components/navigation";
 
-export default function HomePage() {
-  redirect("/login");
+export default function LoginPage() {
+    redirect("/user_profile_another");
 }
