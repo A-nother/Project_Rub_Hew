@@ -1,5 +1,5 @@
 import Image from "next/image";
-import LogoThin from "./logo";
+import LogoThin from "./logoThin";
 
 export default function NavbarMain() {
     return (
