@@ -1,4 +1,4 @@
-import LogoThin from "./logo";
+import LogoThin from "./logoThin";
 
 export default function NavbarLR() {
     return (

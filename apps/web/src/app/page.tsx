@@ -1,9 +1,6 @@
-import NavbarMain from "./components/navbarMain";
+
+import { redirect } from "next/dist/client/components/navigation";
 
 export default function HomePage() {
-  return (
-    <main className="min-h-screen bg-[#FFF8EC] text-[#D5C2A3]">
-      <NavbarMain />
-    </main>
-  );
+  redirect("/login");
 }
