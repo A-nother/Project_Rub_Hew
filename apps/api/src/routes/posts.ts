@@ -117,7 +117,7 @@ app.get("/api/feed", async (c) => {
     {
       $project: {
         _id: 1,
-        discription: 1,
+        description: 1,
         postImageUrl: 1,
         postType: 1,
         postCategory: 1,
