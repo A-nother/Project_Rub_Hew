@@ -117,53 +117,55 @@ export default function PostList() {
 
               {/* Description */}
               <div className="mb-5">
+                <p className="text-[#324B66] text-xs font-semibold mb-1">ข้อความ</p>
                 <p className="text-[#324B66] text-sm leading-relaxed line-clamp-3">
                   {post.description}
                 </p>
               </div>
 
-              {/* Visual Content */}
-              {isCarrier ? (
-                /* Carrier: แสดง items ที่ต้องการหิ้ว */
-                post.items && post.items.length > 0 ? (
-                  <div className="flex items-end gap-3 mt-2">
-                    {post.items.slice(0, 3).map((item, idx) => (
-                      <div key={idx} className="flex flex-col w-[90px]">
-                        <Image
-                          src={item.itemImageUrl}
-                          className="w-full h-[100px] object-cover rounded-xl bg-gray-300 mb-1"
-                          alt=""
-                          width={90}
-                          height={100}
-                        />
-                        <p className="text-[11px] text-[#324B66] font-bold truncate">
-                          {item.itemName}
-                        </p>
-                        <p className="text-[11px] text-[#324B66] opacity-60">
-                          {item.itemPrice} บาท
-                        </p>
-                      </div>
-                    ))}
-                    {post.items.length > 3 && (
-                      <div className="mb-8">
-                        <button className="rounded-full px-4 py-2 text-[11px] font-bold text-[#324B66] bg-[#81CBC7]/50">
-                          เพิ่มเติม...
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ) : null
-              ) : (
-                /* Request: แสดง postImageUrl รูปภาพโพสต์ */
-                post.postImageUrl ? (
-                  <Image
-                    src={post.postImageUrl}
-                    className="w-full h-[180px] object-cover rounded-2xl bg-gray-300 mt-2"
-                    alt=""
-                    width={400}
-                    height={180}
-                  />
-                ) : null
+              {/* Visual Content — items (ถ้ามี) */}
+              {post.items && post.items.length > 0 && (
+                <div className="flex items-end gap-3 mt-2">
+                  {post.items.slice(0, 3).map((item, idx) => (
+                    <div key={idx} className="flex flex-col w-[90px]">
+                      <Image
+                        src={item.itemImageUrl}
+                        className="w-full h-[100px] object-cover rounded-xl bg-gray-300 mb-1"
+                        alt=""
+                        width={90}
+                        height={100}
+                      />
+                      <p className="text-[11px] text-[#324B66] font-bold truncate">
+                        {item.itemName}
+                      </p>
+                      <p className="text-[11px] text-[#324B66] opacity-60">
+                        {item.itemPrice} บาท
+                      </p>
+                    </div>
+                  ))}
+                  {post.items.length > 3 && (
+                    <div className="mb-8">
+                      <button
+                        className={`rounded-full px-4 py-2 text-[11px] font-bold text-[#324B66] ${
+                          isCarrier ? "bg-[#81CBC7]/50" : "bg-[#EB7F45]/30"
+                        }`}
+                      >
+                        เพิ่มเติม...
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Visual Content — postImageUrl (ถ้ามี) */}
+              {post.postImageUrl && (
+                <Image
+                  src={post.postImageUrl}
+                  className="w-full h-[180px] object-cover rounded-2xl bg-gray-300 mt-2"
+                  alt=""
+                  width={400}
+                  height={180}
+                />
               )}
             </div>
 
