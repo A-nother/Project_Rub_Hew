@@ -3,10 +3,10 @@ import { ObjectId } from "mongodb";
 export type PostDoc = {
   _id?: ObjectId;
   userId: ObjectId;
-  discription: string;
+  description: string;
   itemListID: ObjectId | null;
   postImageUrl: string | null;
   postType: "Carrier" | "Request";
-  postCatagory: string;
+  postCategory: string;
   crateAt: Date;
 };
