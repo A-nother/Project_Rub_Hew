@@ -5,6 +5,7 @@ import NavbarMain from "../components/navbarMain";
 import Sidebar from "../components/sidebar";
 import FilterChipsAndAdd from "../components/filterChipsAndAdd";
 import CreatePostForm from "../components/createPostForm";
+import PostList from "../components/postList"; // 🔹 import เข้ามาใหม่
 
 export default function HomePage() {
   const [openCreate, setOpenCreate] = useState(false);
@@ -18,17 +19,13 @@ export default function HomePage() {
 
         <div className="flex-1">
           <section className="p-6 overflow-y-auto h-145">
-
-            {/* 🔥 ส่ง function ไป */}
             <FilterChipsAndAdd onOpen={() => setOpenCreate(true)} />
 
-            {/* 🔥 ตรงนี้สำคัญ */}
             {openCreate ? (
               <CreatePostForm onClose={() => setOpenCreate(false)} />
             ) : (
-              <div>{/* post list เดิม */}</div>
+              <PostList />
             )}
-
           </section>
         </div>
       </div>
